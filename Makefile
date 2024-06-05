@@ -14,7 +14,7 @@ install-foundry:
 	curl -L https://foundry.paradigm.xyz | bash
 
 .PHONY: anvil
-# Run anvil.
+# Run Anvil.
 anvil:
 	anvil
 
@@ -32,6 +32,11 @@ compile:
 # Deploy smart contract.
 deploy:
 	$(FDY) && forge create --rpc-url $(RPC_URL) --private-key $(PRI_KEY) src/Cert.sol:Cert
+
+.PHONY: run
+# Run the application.
+run:
+	$(API) && cargo run	
 
 .PHONY: fmt
 # Format the Rust files.

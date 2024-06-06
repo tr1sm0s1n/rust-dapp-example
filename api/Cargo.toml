@@ -2,17 +2,22 @@
 name = "api"
 version = "0.1.0"
 edition = "2021"
+default-run = "api"
 
 [dependencies]
 alloy = { git = "https://github.com/alloy-rs/alloy", version = "0.1.0", features = [
     "contract",
     "network",
     "node-bindings",
+    "provider-http",
+    "provider-ws",
+    "rpc-client-ws",
+    "rpc-client",
     "rpc-types",
-    "rpc-types-eth",
-    "provider-http"] }
+    "rpc-types-eth"] }
 axum = { version = "0.7.0", features = ["tracing"] }
 eyre = "0.6.12"
+futures = "0.3"
 serde = { version = "1.0", features = ["derive"] }
 tokio = { version = "1.0", features = ["full"] }
 tower-http = { version = "0.5.0", features = ["add-extension", "trace"] }

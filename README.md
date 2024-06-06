@@ -70,7 +70,7 @@ curl -X POST http://localhost:3000/issue -H "Content-Type: application/json" -d 
 Fetch a certificate.
 
 ```bash
-curl http://localhost:3000/fetch/test-01
+curl http://localhost:3000/fetch/101
 ```
 
 ## 📜 License

@@ -61,6 +61,12 @@ Run the application.
 make run
 ```
 
+Listen for events (new terminal).
+
+```bash
+make listen
+```
+
 Issue a certificate (new terminal).
 
 ```bash

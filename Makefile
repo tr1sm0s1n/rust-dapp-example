@@ -38,6 +38,11 @@ deploy:
 run:
 	$(API) && cargo run	
 
+.PHONY: listen
+# Listen for events.
+listen:
+	$(API) && cargo run	--bin listener
+
 .PHONY: fmt
 # Format the Rust files.
 fmt:

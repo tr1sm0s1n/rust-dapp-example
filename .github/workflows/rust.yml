@@ -17,8 +17,9 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Install Foundry
-      run: curl -sSf -L https://raw.githubusercontent.com/foundry-rs/foundry/master/foundryup/foundryup -o foundryup
-    - run: chmod +x foundryup
-    - run: ./foundryup
+      run: |
+        make install-foundry
+        source ~/.bashrc
+        foundryup
     - name: Test smart contract
       run: make test

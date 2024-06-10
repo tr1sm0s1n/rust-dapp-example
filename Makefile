@@ -6,47 +6,47 @@ PRI_KEY = 0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80
 .PHONY: install-rust
 # Install Rust using rustup.
 install-rust:
-	curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+	@curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 
 .PHONY: install-foundry
 # Install Foundry.
 install-foundry:
-	curl -L https://foundry.paradigm.xyz | bash
+	@curl -L https://foundry.paradigm.xyz | bash
 
 .PHONY: anvil
 # Run Anvil.
 anvil:
-	anvil
+	@anvil
 
 .PHONY: test
 # Test smart contract.
 test:
-	$(FDY) && forge test
+	@$(FDY) && forge test
 
 .PHONY: compile
 # Compile smart contract.
 compile:
-	$(FDY) && forge build
+	@$(FDY) && forge build
 
 .PHONY: deploy
 # Deploy smart contract.
 deploy:
-	$(FDY) && forge create --rpc-url $(RPC_URL) --private-key $(PRI_KEY) src/Cert.sol:Cert
+	@$(FDY) && forge create --rpc-url $(RPC_URL) --private-key $(PRI_KEY) src/Cert.sol:Cert
 
 .PHONY: run
 # Run the application.
 run:
-	$(API) && cargo run	
+	@$(API) && cargo run	
 
 .PHONY: listen
 # Listen for events.
 listen:
-	$(API) && cargo run	--bin listener
+	@$(API) && cargo run	--bin listener
 
 .PHONY: fmt
 # Format the Rust files.
 fmt:
-	$(API) && cargo fmt
+	@$(API) && cargo fmt
 
 help:
 	@echo ''

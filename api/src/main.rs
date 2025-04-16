@@ -1,8 +1,10 @@
 use alloy::{
-    providers::{ProviderBuilder, RootProvider},
+    providers::{
+        fillers::{BlobGasFiller, ChainIdFiller, FillProvider, GasFiller, JoinFill, NonceFiller},
+        Identity, Provider, ProviderBuilder, RootProvider,
+    },
     rpc::types::eth::TransactionReceipt,
     sol,
-    transports::http::{Client, Http},
 };
 use axum::{
     extract::{Path, State},
@@ -15,6 +17,16 @@ use serde::{Deserialize, Serialize};
 use tower_http::trace::TraceLayer;
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 use Cert::CertInstance;
+
+type Instance = CertInstance<
+    FillProvider<
+        JoinFill<
+            Identity,
+            JoinFill<GasFiller, JoinFill<BlobGasFiller, JoinFill<NonceFiller, ChainIdFiller>>>,
+        >,
+        RootProvider,
+    >,
+>;
 
 #[derive(Debug, Deserialize, Serialize)]
 struct Certificate {
@@ -31,7 +43,7 @@ sol!(
     "utils/Cert.json"
 );
 
-async fn instance() -> Result<CertInstance<Http<Client>, RootProvider<Http<Client>>>> {
+async fn instance_builder() -> Result<Instance> {
     let rpc_url = "http://127.0.0.1:8545".parse()?;
 
     // Create a provider with the HTTP transport using the `reqwest` crate.
@@ -46,7 +58,7 @@ async fn instance() -> Result<CertInstance<Http<Client>, RootProvider<Http<Clien
 
 #[tokio::main]
 async fn main() {
-    let cert = instance().await.unwrap();
+    let cert = instance_builder().await.unwrap();
 
     // logging middleware
     tracing_subscriber::registry()
@@ -66,14 +78,14 @@ async fn main() {
     axum::serve(listener, app(cert)).await.unwrap();
 }
 
-fn app(cert: CertInstance<Http<Client>, RootProvider<Http<Client>>>) -> Router {
+fn app(instance: Instance) -> Router {
     // build our application with multiple routes
     Router::new()
         .route("/", get(home))
         .route("/issue", post(issue_certificate))
-        .route("/fetch/:id", get(fetch_certificate))
+        .route("/fetch/{id}", get(fetch_certificate))
         .layer(TraceLayer::new_for_http())
-        .with_state(cert)
+        .with_state(instance)
 }
 
 async fn home() -> &'static str {
@@ -81,11 +93,17 @@ async fn home() -> &'static str {
 }
 
 async fn issue_certificate(
-    State(cert): State<CertInstance<Http<Client>, RootProvider<Http<Client>>>>,
+    State(instance): State<Instance>,
     Json(input): Json<Certificate>,
 ) -> Result<Json<TransactionReceipt>, (StatusCode, String)> {
-    let builder = cert.issue(input.id, input.name, input.course, input.grade, input.date);
+    let builder = instance.issue(input.id, input.name, input.course, input.grade, input.date);
+    let accounts = instance
+        .provider()
+        .get_accounts()
+        .await
+        .map_err(internal_error)?;
     let receipt = builder
+        .from(accounts[0])
         .send()
         .await
         .map_err(internal_error)?
@@ -98,9 +116,9 @@ async fn issue_certificate(
 
 async fn fetch_certificate(
     Path(id): Path<String>,
-    State(cert): State<CertInstance<Http<Client>, RootProvider<Http<Client>>>>,
+    State(instance): State<Instance>,
 ) -> Result<Json<Certificate>, (StatusCode, String)> {
-    let result = cert
+    let result = instance
         .Certificates(id.clone())
         .call()
         .await

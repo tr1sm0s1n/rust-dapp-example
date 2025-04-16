@@ -96,12 +96,17 @@ async fn issue_certificate(
     State(instance): State<Instance>,
     Json(input): Json<Certificate>,
 ) -> Result<Json<TransactionReceipt>, (StatusCode, String)> {
+    // Call builder for the issue function.
     let builder = instance.issue(input.id, input.name, input.course, input.grade, input.date);
+
+    // Get unlocked accounts from the network.
     let accounts = instance
         .provider()
         .get_accounts()
         .await
         .map_err(internal_error)?;
+
+    // Use the first account to send transaction.
     let receipt = builder
         .from(accounts[0])
         .send()
@@ -118,11 +123,14 @@ async fn fetch_certificate(
     Path(id): Path<String>,
     State(instance): State<Instance>,
 ) -> Result<Json<Certificate>, (StatusCode, String)> {
+    // Fetch certificate corresponding to 'id'.
     let result = instance
         .Certificates(id.clone())
         .call()
         .await
         .map_err(internal_error)?;
+
+    // Create a new variable of type 'Certificate' for payload.
     let certificate = Certificate {
         id,
         name: result.name,

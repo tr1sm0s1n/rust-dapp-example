@@ -31,7 +31,7 @@ compile:
 .PHONY: deploy
 # Deploy smart contract.
 deploy:
-	@$(FDY) && forge create --rpc-url $(RPC_URL) --private-key $(PRI_KEY) src/Cert.sol:Cert
+	@$(FDY) && forge create --rpc-url $(RPC_URL) --private-key $(PRI_KEY) src/Cert.sol:Cert --broadcast
 
 .PHONY: run
 # Run the application.

@@ -19,6 +19,12 @@ git clone https://github.com/tr1sm0s1n/rust-dapp-example.git
 cd rust-dapp-example
 ```
 
+Fetch Foundry submodule.
+
+```bash
+git submodule update --init --recursive
+```
+
 Install Rust.
 
 ```bash

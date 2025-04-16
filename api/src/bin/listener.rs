@@ -6,6 +6,7 @@ use alloy::{
         types::eth::{BlockNumberOrTag, Filter},
     },
     sol,
+    sol_types::SolEvent,
 };
 use eyre::Result;
 use futures::stream::StreamExt;
@@ -31,7 +32,7 @@ async fn main() -> Result<()> {
                 .unwrap(),
         )
         // By specifying an `event` or `event_signature` we listen for a specific event of the contract.
-        .event("Issued(string,string,string)")
+        .event(Cert::Issued::SIGNATURE)
         .from_block(BlockNumberOrTag::Latest);
 
     // Subscribe to logs.
@@ -41,7 +42,7 @@ async fn main() -> Result<()> {
     println!("Listening for events...");
 
     while let Some(log) = stream.next().await {
-        println!("Issued: {log:?}");
+        println!("\x1b[32mIssued:\x1b[0m {log:?}");
     }
 
     Ok(())

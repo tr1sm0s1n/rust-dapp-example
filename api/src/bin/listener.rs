@@ -23,7 +23,7 @@ async fn main() -> Result<()> {
 
     // Create the provider.
     let ws = WsConnect::new(rpc_url);
-    let provider = ProviderBuilder::new().on_ws(ws).await?;
+    let provider = ProviderBuilder::new().connect_ws(ws).await?;
 
     let filter = Filter::new()
         .address(

@@ -1,22 +1,22 @@
+use Cert::CertInstance;
 use alloy::{
     providers::{
-        fillers::{BlobGasFiller, ChainIdFiller, FillProvider, GasFiller, JoinFill, NonceFiller},
         Identity, Provider, ProviderBuilder, RootProvider,
+        fillers::{BlobGasFiller, ChainIdFiller, FillProvider, GasFiller, JoinFill, NonceFiller},
     },
     rpc::types::eth::TransactionReceipt,
     sol,
 };
 use axum::{
+    Json, Router,
     extract::{Path, State},
     http::StatusCode,
     routing::{get, post},
-    Json, Router,
 };
 use eyre::Result;
 use serde::{Deserialize, Serialize};
 use tower_http::trace::TraceLayer;
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
-use Cert::CertInstance;
 
 type Instance = CertInstance<
     FillProvider<
@@ -47,7 +47,7 @@ async fn instance_builder() -> Result<Instance> {
     let rpc_url = "http://127.0.0.1:8545".parse()?;
 
     // Create a provider with the HTTP transport using the `reqwest` crate.
-    let provider = ProviderBuilder::new().on_http(rpc_url);
+    let provider = ProviderBuilder::new().connect_http(rpc_url);
     let contract = Cert::new(
         "0x5FbDB2315678afecb367f032d93F642f64180aa3".parse()?,
         provider,

@@ -28,49 +28,49 @@ git submodule update --init --recursive
 Install Rust.
 
 ```bash
-make install-rust
+just install-rust
 ```
 
 Install Foundry.
 
 ```bash
-make install-foundry
+just install-foundry
 ```
 
 Test smart contract.
 
 ```bash
-make test
+just test
 ```
 
 Run Anvil.
 
 ```bash
-make anvil
+just anvil
 ```
 
 Compile smart contract.
 
 ```bash
-make compile
+just compile
 ```
 
 Deploy smart contract.
 
 ```bash
-make deploy
+just deploy
 ```
 
 Run the application.
 
 ```bash
-make run
+just run
 ```
 
 Listen for events (new terminal).
 
 ```bash
-make listen
+just listen
 ```
 
 Issue a certificate (new terminal).

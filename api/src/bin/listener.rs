@@ -13,8 +13,7 @@ use futures::stream::StreamExt;
 
 sol!(
     #[sol(rpc)]
-    Cert,
-    "utils/Cert.json"
+    "../foundry/src/Cert.sol"
 );
 
 #[tokio::main]

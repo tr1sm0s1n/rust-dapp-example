@@ -39,8 +39,7 @@ struct Certificate {
 
 sol!(
     #[sol(rpc)]
-    Cert,
-    "utils/Cert.json"
+    "../foundry/src/Cert.sol"
 );
 
 async fn instance_builder() -> Result<Instance> {
@@ -133,10 +132,10 @@ async fn fetch_certificate(
     // Create a new variable of type 'Certificate' for payload.
     let certificate = Certificate {
         id,
-        name: result.name,
-        course: result.course,
-        grade: result.grade,
-        date: result.date,
+        name: result._0,
+        course: result._1,
+        grade: result._2,
+        date: result._3,
     };
 
     Ok(Json(certificate))

@@ -40,9 +40,17 @@ async fn main() -> Result<()> {
     let mut stream = sub.into_stream();
 
     println!("Listening for events...");
+    println!("-----------------------");
 
     while let Some(log) = stream.next().await {
-        println!("\x1b[32mIssued:\x1b[0m {log:?}");
+        println!("Certificate issued!!");
+        println!("--------------------");
+        let Cert::Issued { course, id, grade } = log.log_decode()?.inner.data;
+        println!("Course: \x1b[34m{course}\x1b[0m");
+        println!("ID: \x1b[34m{id}\x1b[0m");
+        println!("Grade: \x1b[34m{grade}\x1b[0m");
+        println!("Raw Log: \x1b[32m{log:?}\x1b[0m");
+        println!("--------------------");
     }
 
     Ok(())

@@ -76,13 +76,13 @@ just listen
 Issue a certificate (new terminal).
 
 ```bash
-curl -X POST http://localhost:3000/issue -H "Content-Type: application/json" -d '{"id": "101", "name": "Keith", "course": "ETH-Rust", "grade": "A", "date": "06-06-24"}'
+curl -X POST http://localhost:3000/issue -H "Content-Type: application/json" -d '{"id": 87, "name": "Dreya", "course": "MBCC", "grade": "S", "date": "27-08-25"}'
 ```
 
 Fetch a certificate.
 
 ```bash
-curl http://localhost:3000/fetch/101
+curl http://localhost:3000/fetch/87
 ```
 
 ## 📜 License

@@ -1,5 +1,6 @@
 use Cert::CertInstance;
 use alloy::{
+    primitives::Uint,
     providers::{
         Identity, Provider, ProviderBuilder, RootProvider,
         fillers::{BlobGasFiller, ChainIdFiller, FillProvider, GasFiller, JoinFill, NonceFiller},
@@ -30,7 +31,7 @@ type Instance = CertInstance<
 
 #[derive(Debug, Deserialize, Serialize)]
 struct Certificate {
-    id: String,
+    id: Uint<256, 4>,
     name: String,
     course: String,
     grade: String,
@@ -119,7 +120,7 @@ async fn issue_certificate(
 }
 
 async fn fetch_certificate(
-    Path(id): Path<String>,
+    Path(id): Path<Uint<256, 4>>,
     State(instance): State<Instance>,
 ) -> Result<Json<Certificate>, (StatusCode, String)> {
     // Fetch certificate corresponding to 'id'.

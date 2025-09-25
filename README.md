@@ -84,15 +84,3 @@ Fetch a certificate.
 ```bash
 curl http://localhost:3000/fetch/87
 ```
-
-## 📜 License
-
-Click [here](./LICENSE.md).
-
-## 🎗️ Contributing
-
-Click [here](./CONTRIBUTING.md).
-
-## ⚖️ Code of Conduct
-
-Click [here](./CODE_OF_CONDUCT.md).

@@ -10,8 +10,12 @@ contract Cert {
     }
 
     modifier onlyAdmin() {
-        require(msg.sender == admin, "Access Denied");
+        _onlyAdmin();
         _;
+    }
+         
+    function _onlyAdmin() view internal {
+        require(msg.sender == admin, "Access Denied");
     }
 
     struct Certificate {
@@ -21,7 +25,7 @@ contract Cert {
         string date;
     }
 
-    mapping(uint256 => Certificate) public Certificates;
+    mapping(uint256 => Certificate) public certificates;
 
     function issue(
         uint256 _id,
@@ -30,7 +34,7 @@ contract Cert {
         string memory _grade,
         string memory _date
     ) public onlyAdmin {
-        Certificates[_id] = Certificate(_name, _course, _grade, _date);
+        certificates[_id] = Certificate({ name: _name, course: _course, grade: _grade, date: _date });
         emit Issued(_course, _id, _grade);
     }
 }

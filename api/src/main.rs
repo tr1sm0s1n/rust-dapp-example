@@ -125,7 +125,7 @@ async fn fetch_certificate(
 ) -> Result<Json<Certificate>, (StatusCode, String)> {
     // Fetch certificate corresponding to 'id'.
     let result = instance
-        .Certificates(id.clone())
+        .certificates(id)
         .call()
         .await
         .map_err(internal_error)?;
